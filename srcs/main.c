@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anonymous <anonymous@student.42.fr>        +#+  +:+       +#+        */
+/*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/16 20:07:42 by anonymous         #+#    #+#             */
-/*   Updated: 2017/05/17 09:35:27 by anonymous        ###   ########.fr       */
+/*   Updated: 2017/05/17 16:03:22 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ void	print_err(t_err *err)
 		err->bdcmd = err->bdcmd->next;
 	}
 }
+
 t_err *err_init(void)
 {
 	t_err *err;
@@ -58,50 +59,59 @@ t_err *err_init(void)
 	return (err);
 }
 
-t_cmd *get_commands(int argc, char **argv, t_err *err)
+void	get_stat(int argc, char **argv, struct stat *sb, t_data *data)
 {
-	t_cmd *cmds;
 	int i;
-	int j;
+	char *tmp;
 
-	cmds = (t_cmd*)malloc(sizeof(t_cmd));
-	ft_bzero(cmds, sizeof(cmds));
 	i = 1;
 	while (i < argc)
 	{
-		j = 1;
-		if (argv[i][0] == '-')
+		if (argv[i][0] != '-')
 		{
-			while (argv[i][j])
+			if (-1 == (stat(argv[i], &(*sb))))
 			{
-				if (argv[i][j] == 'l')
-					cmds->l = 1;
-				else if (argv[i][j] == 'R')
-					cmds->R = 1;
-				else if (argv[i][j] == 'r')
-					cmds->r = 1;
-				else if (argv[i][j] == 'a')
-					cmds->a = 1;
-				else if (argv[i][j] == 't')
-					cmds->t = 1;
-				else
-					add_bd_cmd(&(err->bdcmd), argv[i][j]);
-				j++;
+				ft_printf("./ft_ls: %s: No such file or directory\n", argv[i]);
+				exit(1);
 			}
+			ft_printf("  %ld  ",(long)sb->st_nlink);
+			ft_printf("%ld\t", (long)sb->st_uid);
+			ft_printf("%lld ", (long long)sb->st_size);
+			data->total += (long long)sb->st_blocks;
+			//ft_printf("Last file access:         %s", ctime(&sb->st_atime)); // -u
+			//if (cmds->l && cmds->T)
+			tmp	= ctime(&sb->st_mtime);
+			tmp[ft_strlen(tmp) - 1] = '\0';
+				ft_printf("%s %s\n", tmp, argv[i]); // -t -lT
 		}
 		i++;
 	}
-	return (cmds);
+}
+
+t_data	*data_init(void)
+{
+	t_data *data;
+
+	data = (t_data *)malloc(sizeof(t_data));
+	data->cmds = NULL;
+	data->total = 0;
+	return (data);
 }
 
 int main(int argc, char **argv)
 {
-	t_cmd *cmds;
+	t_data *data;
 	t_err *err;
+	struct stat sb;
 
+	data = data_init();
 	err = err_init();
-	cmds = get_commands(argc, argv, err);
+	data->cmds = get_commands(argc, argv);
+	get_stat(argc, argv, &sb, data);
 	print_err(err);
-	ft_printf("l:%i R:%i r:%i a:%i t:%i\n", cmds->l, cmds->R, cmds->r, cmds->a, cmds->t);
+	ft_printf("total: %lli\n", data->total);
 	return (1);
 }
+
+
+

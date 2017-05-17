@@ -6,7 +6,7 @@
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/05 12:39:37 by rle               #+#    #+#             */
-/*   Updated: 2017/05/07 22:49:44 by rle              ###   ########.fr       */
+/*   Updated: 2017/05/17 16:11:00 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ int			get_flags(int fmt, t_flag *flags)
 		flags->minus++;
 	if (fmt == '+')
 		flags->plus++;
-	if (fmt == '#' || fmt == '0' || fmt == ' ' || fmt == '-' || fmt == '+')
+	if (fmt == '#' || fmt == '0' || fmt == ' ' \
+		|| fmt == '-' || fmt == '+')
 		return (1);
 	return (0);
 }

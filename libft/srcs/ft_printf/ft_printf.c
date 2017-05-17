@@ -6,7 +6,7 @@
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/05 14:44:59 by rle               #+#    #+#             */
-/*   Updated: 2017/05/07 22:52:12 by rle              ###   ########.fr       */
+/*   Updated: 2017/05/17 16:12:41 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int			ft_printf(const char *fmt, ...)
 		{
 			reset_params(params);
 			fmt++;
-			get_params(&fmt, params);
+			get_params(&fmt, params, args);
 			handlers(fmt, params, args);
 			counter += params->counter;
 		}

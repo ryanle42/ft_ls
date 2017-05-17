@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anonymous <anonymous@student.42.fr>        +#+  +:+       +#+        */
+/*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/28 16:54:51 by rle               #+#    #+#             */
-/*   Updated: 2017/05/17 00:24:30 by anonymous        ###   ########.fr       */
+/*   Updated: 2017/05/17 16:12:30 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 # include <stdarg.h>
 # include <unistd.h>
 # include <stdlib.h>
-# include <stdint.h>
 
 /*
 **	LIBFT STRUCTS
@@ -143,7 +142,7 @@ int					get_size(const char *fmt);
 void				remove_conflict_flags(t_param *params);
 int					get_flags(int fmt, t_flag *flags);
 void				reset_params(t_param *params);
-void				get_params(const char **fmt, t_param *params);
+void				get_params(const char **fmt, t_param *params, va_list args);
 intmax_t			convert_signed(t_param *params, intmax_t n);
 intmax_t			convert_unsigned(t_param *params, uintmax_t n);
 void				write_int(t_param *params, intmax_t n);

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: anonymous <anonymous@student.42.fr>        +#+  +:+       +#+         #
+#    By: rle <rle@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/05/16 18:47:59 by rle               #+#    #+#              #
-#    Updated: 2017/05/17 00:34:43 by anonymous        ###   ########.fr        #
+#    Updated: 2017/05/17 14:03:28 by rle              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,6 +15,7 @@ NAME = ft_ls
 OBJS = $(addprefix ./srcs/, \
 			$(addsuffix .o, \
 				main \
+				get_commands \
 			) \
 		)
 
