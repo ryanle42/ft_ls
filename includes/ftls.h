@@ -6,7 +6,7 @@
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/16 19:28:16 by anonymous         #+#    #+#             */
-/*   Updated: 2017/05/17 15:14:48 by rle              ###   ########.fr       */
+/*   Updated: 2017/05/18 21:20:32 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,39 +17,74 @@
 # include <sys/stat.h>
 # include <time.h>
 # include <sys/xattr.h>
+# include <sys/types.h>
 # include <pwd.h>
 
-typedef struct		s_data
+typedef struct			s_data
 {
-	struct s_cmd	*cmds;
-	long long		total;
-}					t_data;
+	int					cmds;
+	long long			total;
+	struct s_err		*err;
+	struct s_files		*files;
+}						t_data;
 
-typedef struct		s_cmd
+typedef struct			s_files
 {
-	int				l;
-	int				R;
-	int				r;
-	int				a;
-	int				t;
-	int				T;
-}					t_cmd;
+	char				*name;
+	struct stat			sb;
+	struct passwd		*pw;
+	struct s_files		*next;
+	struct s_files		*prev;
+}						t_files;
 
-typedef struct		s_bdcmd
+enum				s_cmds
 {
-	char			cmd;
-	struct s_bdcmd	*next;
-}					t_bdcmd;
+	CMD_l = 0x1,
+	CMD_R = 0x2,
+	CMD_r = 0x4,
+	CMD_a = 0x8,
+	CMD_t = 0x16,
+	CMD_T = 0x32
+};
 
 typedef struct		s_err
 {
-	struct s_bdcmd	*bdcmd;
+	char			*file;
+	struct s_err	*next;
 }					t_err;
 
 /*
 **	get_commands
 */
 
-t_cmd				*get_commands(int argc, char **argv);
+int				get_commands(int argc, char **argv);
+
+/*
+**	error
+*/
+void			add_err(t_err **err, char *file);
+void			print_err(t_err *err);
+
+
+/*
+**	files
+*/
+int				add_file(t_data *data, char *name);
+void			print_files(t_files *head);
+
+/*
+struct passwd {
+	char *pw_name;
+	char *pw_passwd;
+	uid_t pw_uid;
+	gid_t pw_gid;
+	time_t pw_change;
+	char *pw_class;
+	char *pw_gecos;
+	char *pw_dir;
+	char *pw_shell;
+	time_t pw_expire;
+}; 
+*/
 
 #endif

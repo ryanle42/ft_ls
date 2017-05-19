@@ -6,12 +6,13 @@
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/17 14:02:12 by rle               #+#    #+#             */
-/*   Updated: 2017/05/17 14:27:51 by rle              ###   ########.fr       */
+/*   Updated: 2017/05/18 19:05:21 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ftls.h>
 
+/*
 static t_cmd	*cmd_init(void)
 {
 	t_cmd *cmds;
@@ -24,33 +25,35 @@ static t_cmd	*cmd_init(void)
 	cmds->t = 0;
 	return (cmds);
 }
-
-static int		set_cmd(t_cmd *cmds, char cmd)
+*/
+static int		set_cmd(int *cmds, char cmd)
 {
 	if (cmd == 'l')
-		cmds->l = 1;
+		(*cmds) |= CMD_l;
 	else if (cmd == 'R')
-		cmds->R = 1;
+		(*cmds) |= CMD_R;
 	else if (cmd == 'r')
-		cmds->r = 1;
+		(*cmds) |= CMD_r;
 	else if (cmd == 'a')
-		cmds->a = 1;
+		(*cmds) |= CMD_a;
 	else if (cmd == 't')
-		cmds->t = 1;
+		(*cmds) |= CMD_t;
 	else if (cmd == 'T')
-		cmds->T = 1;
+		(*cmds) |= CMD_T;
 	else
 		return (-1);
 	return (1);
 }
 
-t_cmd			*get_commands(int argc, char **argv)
+int			get_commands(int argc, char **argv)
 {
-	t_cmd *cmds;
+	//t_cmd *cmds;
+	int cmds;
 	int i;
 	int j;
 
-	cmds = cmd_init();
+	//cmds = cmd_init();
+	cmds = 0;
 	i = 1;
 	while (i < argc)
 	{
@@ -59,7 +62,7 @@ t_cmd			*get_commands(int argc, char **argv)
 		{
 			while (argv[i][j])
 			{
-				if (-1 == (set_cmd(cmds, argv[i][j])))
+				if (-1 == (set_cmd(&cmds, argv[i][j])))
 				{
 					ft_printf("./ft_ls: illegal option -- %c\n", argv[i][j]);
 					ft_printf("usage: ./ft_ls [-Ralrt] [file ...]\n");

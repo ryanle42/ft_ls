@@ -6,83 +6,32 @@
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/16 20:07:42 by anonymous         #+#    #+#             */
-/*   Updated: 2017/05/17 16:03:22 by rle              ###   ########.fr       */
+/*   Updated: 2017/05/18 21:20:37 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ftls.h>
 
-void	add_bd_cmd(t_bdcmd **head, char cmd)
-{
-	t_bdcmd *curr;
-
-	if (!(*head))
-	{
-		(*head) = (t_bdcmd *)malloc(sizeof(t_bdcmd));
-		(*head)->cmd = cmd;
-		(*head)->next = NULL;
-	}
-	else
-	{
-		curr = *head;
-		if (curr->cmd == cmd)
-				return ;
-		while (curr->next)
-		{
-			if (curr->cmd == cmd)
-				return ;
-			curr = curr->next;
-		}
-		if (curr->cmd == cmd)
-			return ;
-		curr->next = (t_bdcmd *)malloc(sizeof(t_bdcmd));
-		curr->next->cmd = cmd;
-		curr->next->next = NULL;
-	}
-}
-
-void	print_err(t_err *err)
-{
-	while (err->bdcmd)
-	{
-		ft_printf("ft_ls: invalid option -- \'%c\'\n", err->bdcmd->cmd);
-		err->bdcmd = err->bdcmd->next;
-	}
-}
-
-t_err *err_init(void)
-{
-	t_err *err;
-
-	err = (t_err *)malloc(sizeof(t_err));
-	err->bdcmd = NULL;
-	return (err);
-}
-
-void	get_stat(int argc, char **argv, struct stat *sb, t_data *data)
+void	get_stat(int argc, char **argv, t_data *data)
 {
 	int i;
-	char *tmp;
+	struct stat sb;
 
 	i = 1;
 	while (i < argc)
 	{
 		if (argv[i][0] != '-')
 		{
-			if (-1 == (stat(argv[i], &(*sb))))
+			if (-1 == (stat(argv[i], &sb)))
 			{
-				ft_printf("./ft_ls: %s: No such file or directory\n", argv[i]);
+				add_err(&(data->err), argv[i++]);
+				continue;
+			}
+			if (-1 == add_file(data, argv[i]))
+			{
+				ft_printf("Error adding file\n");
 				exit(1);
 			}
-			ft_printf("  %ld  ",(long)sb->st_nlink);
-			ft_printf("%ld\t", (long)sb->st_uid);
-			ft_printf("%lld ", (long long)sb->st_size);
-			data->total += (long long)sb->st_blocks;
-			//ft_printf("Last file access:         %s", ctime(&sb->st_atime)); // -u
-			//if (cmds->l && cmds->T)
-			tmp	= ctime(&sb->st_mtime);
-			tmp[ft_strlen(tmp) - 1] = '\0';
-				ft_printf("%s %s\n", tmp, argv[i]); // -t -lT
 		}
 		i++;
 	}
@@ -92,24 +41,42 @@ t_data	*data_init(void)
 {
 	t_data *data;
 
-	data = (t_data *)malloc(sizeof(t_data));
-	data->cmds = NULL;
+	data = NULL;
+	if (NULL == (data = (t_data *)malloc(sizeof(t_data))))
+		return (NULL);
+	data->err = NULL;
+	if (NULL == (data->err = (t_err *)malloc(sizeof(t_err))))
+		return (NULL);
+	data->files = NULL;
+	if (NULL == (data->files = (t_files *)malloc(sizeof(t_files))))
+		return (NULL);
+	data->files->prev = NULL;
+	data->files->next = NULL;
+	data->files->name = NULL;
+	data->err->file = NULL;
+	data->err->next = NULL;
 	data->total = 0;
 	return (data);
 }
 
+/*
+** 	ft_printf("R %i l %i r %i a %i t %i T %i\n", (data->cmds & CMD_R), (data->cmds & CMD_l), (data->cmds & CMD_r), \
+**		(data->cmds & CMD_a), (data->cmds & CMD_t), (data->cmds & CMD_T));
+*/
+
 int main(int argc, char **argv)
 {
 	t_data *data;
-	t_err *err;
-	struct stat sb;
 
-	data = data_init();
-	err = err_init();
+	if (NULL == (data = data_init()))
+		return (-1);
 	data->cmds = get_commands(argc, argv);
-	get_stat(argc, argv, &sb, data);
-	print_err(err);
-	ft_printf("total: %lli\n", data->total);
+
+	get_stat(argc, argv, data);
+	print_err(data->err);
+	ft_printf("total %lli\n", data->total);
+	print_files(data->files);
+	//ft_printf("%s", data->pw->pw_name);
 	return (1);
 }
 
