@@ -6,7 +6,7 @@
 #    By: rle <rle@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/05/16 18:47:59 by rle               #+#    #+#              #
-#    Updated: 2017/05/18 20:09:13 by rle              ###   ########.fr        #
+#    Updated: 2017/05/20 13:36:22 by rle              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,8 @@ OBJS = $(addprefix ./srcs/, \
 				get_commands \
 				error \
 				files \
+				listxfunct \
+				get_sperm \
 			) \
 		)
 

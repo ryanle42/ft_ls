@@ -6,25 +6,24 @@
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/18 21:19:50 by rle               #+#    #+#             */
-/*   Updated: 2017/05/18 21:28:06 by rle              ###   ########.fr       */
+/*   Updated: 2017/05/20 14:51:58 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ftls.h>
 
-int	add_file(t_data *data, char *name)
+int	add_file(char *path, char *name, t_files *head)
 {
 	t_files *curr;
 	t_files *prev;
 
-	curr = data->files;
+	curr = head;
 	if (!curr->name)
 	{
-		stat(name, &(curr->sb));
+		stat(path, &(curr->sb));
 		if (NULL == (curr->pw = getpwuid(curr->sb.st_uid)))
 			return (-1);
 		curr->name = name;
-		data->total += (long long)curr->sb.st_blocks;
 		return (1);
 	}
 	while (curr->next)
@@ -34,41 +33,48 @@ int	add_file(t_data *data, char *name)
 	prev = curr;
 	curr = curr->next;
 	curr->name = name;
-	stat(name, &(curr->sb));
+	stat(path, &(curr->sb));
 	if (NULL == (curr->pw = getpwuid(curr->sb.st_uid)))
 		return (-1);
 	curr->next = NULL;
 	curr->prev = prev;
-	data->total += (long long)curr->sb.st_blocks;
 	return (1);
 }
 
-int	st_size_spaces(t_files *head)
+void	calc_spaces(t_files *head, t_sp *spaces, long *total)
 {
-	int largest;
+	spaces->fl_sz = 0;
+	spaces->links = 0;
 
-	largest = 0;
+	*total = 0;
 	while (head && head->name)
 	{
-		if (largest < ft_int_length(head->sb.st_size))
-			largest = ft_int_length(head->sb.st_size);
+		*total += head->sb.st_blocks;
+		if (spaces->fl_sz < ft_int_length(head->sb.st_size))
+			spaces->fl_sz = ft_int_length(head->sb.st_size);
+		if (spaces->links < ft_int_length(head->sb.st_nlink))
+			spaces->links = ft_int_length(head->sb.st_nlink);
 		head = head->next;
 	}
-	return (largest);
 }
+
 
 void	print_files(t_files *head)
 {
 	char *tmp;
-	int st_size_sp;
+	t_sp spaces;
+	long total;
 
-	st_size_sp = st_size_spaces(head);
+	calc_spaces(head, &spaces, &total);
+	if (head->name)
+		ft_printf("total %li\n", total);
 	while (head && head->name)
 	{
-		
-		ft_printf("  %ld ", ((long)head->sb.st_nlink));
+		ft_printf("%s", get_sperm(head->sb.st_mode));
+		//get_listxattr(head->name);
+		ft_printf(" %*ld ", spaces.links, ((long)head->sb.st_nlink));
 		ft_printf("%s ", head->pw->pw_name);
-		ft_printf(" %*lld ", st_size_sp, (long long)head->sb.st_size);
+		ft_printf(" %*lld ", spaces.fl_sz, (long long)head->sb.st_size);
 		//ft_printf("Last file access %s", ctime(&(head->sb)->st_atime)); // -u
 		//if (cmds->l && cmds->T)
 		tmp	= ctime(&(head->sb).st_atime);

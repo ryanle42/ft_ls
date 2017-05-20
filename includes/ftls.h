@@ -6,7 +6,7 @@
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/16 19:28:16 by anonymous         #+#    #+#             */
-/*   Updated: 2017/05/18 21:20:32 by rle              ###   ########.fr       */
+/*   Updated: 2017/05/20 14:25:21 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,16 @@
 # define FTLS_H
 
 # include <libft.h>
+# include <dirent.h>
 # include <sys/stat.h>
 # include <time.h>
-# include <sys/xattr.h>
 # include <sys/types.h>
+# include <sys/xattr.h>
 # include <pwd.h>
 
 typedef struct			s_data
 {
 	int					cmds;
-	long long			total;
 	struct s_err		*err;
 	struct s_files		*files;
 }						t_data;
@@ -36,6 +36,12 @@ typedef struct			s_files
 	struct s_files		*next;
 	struct s_files		*prev;
 }						t_files;
+
+typedef struct			s_sp
+{
+	int					fl_sz;
+	int					links;
+}						t_sp;
 
 enum				s_cmds
 {
@@ -69,8 +75,18 @@ void			print_err(t_err *err);
 /*
 **	files
 */
-int				add_file(t_data *data, char *name);
+int				add_file(char *path, char *name, t_files *head);
 void			print_files(t_files *head);
+
+/*
+**	listxattr
+*/
+void			get_listxattr(char *name);
+
+/*
+**	get_sperm
+*/
+char			*get_sperm(int mode);
 
 /*
 struct passwd {

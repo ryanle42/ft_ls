@@ -6,7 +6,7 @@
 #    By: rle <rle@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/28 09:03:31 by rle               #+#    #+#              #
-#    Updated: 2017/05/08 15:02:41 by rle              ###   ########.fr        #
+#    Updated: 2017/05/20 13:39:23 by rle              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,7 @@ OBJ =	$(addprefix ./srcs/, \
 					ft_strlen \
 					ft_strdup \
 					ft_strncpy \
+					ft_strcpy \
 					ft_strcat \
 					ft_strncat \
 					ft_strlcat \
