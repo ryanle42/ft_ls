@@ -6,7 +6,7 @@
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/16 20:07:42 by anonymous         #+#    #+#             */
-/*   Updated: 2017/05/20 14:54:09 by rle              ###   ########.fr       */
+/*   Updated: 2017/05/21 15:50:15 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@ void	recursion(char *path, t_data *data)
 		return ;
 	if (NULL != (dirp = opendir(path)))
 	{
-		ft_printf("%s:\n", path);
+		if (ft_strcmp(path, ".") != 0)
+			ft_printf("\n%s:\n", path);
 		path = ft_strjoin(path, "/");
 		while (NULL != (dp = readdir(dirp)))
 		{
@@ -112,9 +113,7 @@ void	get_stat(int argc, char **argv, t_data *data)
 		while (NULL != (dp = readdir(dirp)))
 		{
 			if (dp->d_name[0] != '.')
-			{
 				read_file(path, dp->d_name, data, NULL);
-			}
 		}
 		closedir(dirp);
 	}
@@ -176,10 +175,23 @@ int main(int argc, char **argv)
 		return (-1);
 	data->cmds = get_commands(argc, argv);
 
-	get_stat(argc, argv, data);
-	print_err(data->err);
-	print_files(data->files);
-	//recursion(".", data);
+	if (!(data->cmds & CMD_R))
+	{
+		get_stat(argc, argv, data);
+		print_err(data->err);
+		print_files(data->files);
+	}
+	else
+	{
+		if (argc == 1)
+			recursion(".", data);
+		while (i < )
+	}
+
+	//ft_printf("R %i l %i r %i a %i t %i T %i\n", (data->cmds & CMD_R), \
+	//	(data->cmds & CMD_l), (data->cmds & CMD_r), (data->cmds & CMD_a), \
+	//	(data->cmds & CMD_t), (data->cmds & CMD_T));
+
 	//ft_printf("%s", data->pw->pw_name);
 	return (1);
 }

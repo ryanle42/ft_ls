@@ -6,7 +6,7 @@
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/18 21:19:50 by rle               #+#    #+#             */
-/*   Updated: 2017/05/20 14:51:58 by rle              ###   ########.fr       */
+/*   Updated: 2017/05/21 15:38:36 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void	print_files(t_files *head)
 		//if (cmds->l && cmds->T)
 		tmp	= ctime(&(head->sb).st_atime);
 		tmp[ft_strlen(tmp) - 1] = '\0';
-		ft_printf("%s %s\n", tmp, head->name); // -t -lT
+		ft_printf("%s %s\n", tmp, head->name); // -t -l
 		head = head->next;
 	}
 }

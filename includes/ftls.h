@@ -6,7 +6,7 @@
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/16 19:28:16 by anonymous         #+#    #+#             */
-/*   Updated: 2017/05/20 14:25:21 by rle              ###   ########.fr       */
+/*   Updated: 2017/05/21 15:35:27 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,12 @@ typedef struct			s_sp
 
 enum				s_cmds
 {
-	CMD_l = 0x1,
-	CMD_R = 0x2,
-	CMD_r = 0x4,
-	CMD_a = 0x8,
-	CMD_t = 0x16,
-	CMD_T = 0x32
+	CMD_l = 1,
+	CMD_R = 2,
+	CMD_r = 4,
+	CMD_a = 8,
+	CMD_t = 16,
+	CMD_T = 32
 };
 
 typedef struct		s_err
