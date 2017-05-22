@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rle <rle@student.42.fr>                    +#+  +:+       +#+         #
+#    By: anonymous <anonymous@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/05/16 18:47:59 by rle               #+#    #+#              #
-#    Updated: 2017/05/20 13:36:22 by rle              ###   ########.fr        #
+#    Updated: 2017/05/21 23:56:45 by anonymous        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,8 +17,8 @@ OBJS = $(addprefix ./srcs/, \
 				main \
 				get_commands \
 				error \
-				files \
-				listxfunct \
+				ent \
+				entlst \
 				get_sperm \
 			) \
 		)
@@ -34,7 +34,7 @@ LIB = libft
 all: $(NAME)
 
 $(NAME): $(LIB) $(OBJS)
-	$(CC) $(CFLAGS) $(LIB)/libft.a $(OBJS) $(INCLUDES) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(LIB)/libft.a $(INCLUDES) -o $(NAME)
 	@echo "\x1B[31mFT_LS made"
 
 %.o: %.c

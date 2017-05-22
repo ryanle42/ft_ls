@@ -3,148 +3,85 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: anonymous <anonymous@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/16 20:07:42 by anonymous         #+#    #+#             */
-/*   Updated: 2017/05/21 15:50:15 by rle              ###   ########.fr       */
+/*   Updated: 2017/05/22 00:28:28 by anonymous        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ftls.h>
 
-void	read_file(char *path, char *name, t_data *data, t_files *files)
+void	read_ent(char *path, char *name, t_data *data, t_ent *ents)
 {
 	struct stat sb;
 
-	path = ft_strjoin(path, name);
+	path = ft_strjoin(path, name, 0);
 	if (-1 == (stat(path, &sb)))
 		add_err(&(data->err), name);
-	else if (files == NULL)
-	{
-		if (-1 == add_file(path, name, data->files))
-		{
-			ft_printf("Error adding file\n");
-			exit(1);
-		}
-	}
-	else
-	{
-		if (-1 == add_file(path, name, files))
-		{
-			ft_printf("Error adding file\n");
-			exit(1);
-		}
-	}
+	if (-1 == add_ent(path, name, ents))
+		err(NULL, 2);
 }
 
-t_files		*files_init(void)
-{
-	t_files *files;
-
-	if (NULL == (files = (t_files *)malloc(sizeof(t_files))))
-		return (NULL);
-	files->name = NULL;
-	files->next = NULL;
-	files->prev = NULL;
-	return (files);
-}
-
-void	recursion(char *path, t_data *data)
-{
-	char *name;
-	DIR *dirp;
-	struct dirent *dp;
-	t_files *files;
-
-	if (NULL == (files = files_init()))
-		return ;
-	if (NULL != (dirp = opendir(path)))
-	{
-		if (ft_strcmp(path, ".") != 0)
-			ft_printf("\n%s:\n", path);
-		path = ft_strjoin(path, "/");
-		while (NULL != (dp = readdir(dirp)))
-		{
-			if (dp->d_name[0] != '.')
-			{
-				name = ft_copystr(dp->d_name);
-				read_file(path, name, data, files);
-			}
-		}
-		closedir(dirp);
-		print_files(files);
-	}
-	else
-		return ;
-	if (NULL != (dirp = opendir(path)))
-	{
-		while (NULL != (dp = readdir(dirp)))
-		{
-			if (dp->d_name[0] != '.' && \
-				ft_strcmp(dp->d_name, ".") != 0 && \
-				ft_strcmp(dp->d_name, "..") != 0)
-			{
-				name = ft_strjoin(path, dp->d_name);
-				recursion(name, data);
-			}
-		}
-		closedir(dirp);
-	}
-}
-
-void	get_stat(int argc, char **argv, t_data *data)
+int	get_stat(int argc, char **argv, t_data *data)
 {
 	int i;
 	DIR *dirp;
 	struct dirent *dp;
 	char *path;
 	char *name;
-	t_files *files;
+	t_ent *ents;
 
-	i = 1;
+	i = 0;
 	if (argc == 1)
 	{
-		path = "./";
 		if (NULL == (dirp = opendir(".")))
 		{
 			ft_printf("Cannot open .");
 			exit(1);
 		}
+		if (NULL == (ents = ent_init()))
+			return (-1);
 		while (NULL != (dp = readdir(dirp)))
 		{
 			if (dp->d_name[0] != '.')
-				read_file(path, dp->d_name, data, NULL);
+			{
+				name = ft_copystr(dp->d_name);
+				read_ent(".", name, data, ents);
+			}
 		}
+		entlst_add_ents(data->entlst, ents);
 		closedir(dirp);
 	}
-	while (i < argc)
+	while (++i < argc)
 	{
 		if (argv[i][0] != '-')
 		{
-			path = ft_strjoin(argv[i], "/");
+			path = ft_strjoin(argv[i], "/", 0);
 			if (NULL != (dirp = opendir(path)))
 			{
-				if (NULL == (files = files_init()))
-						return ;
-				ft_printf("%s:\n", argv[i]);
+				if (NULL == (ents = ent_init()))
+						return (-1);
+				if (argc > 2)
+				{
+					if (i != 1)
+						ft_printf("\n");
+					ft_printf("%s:\n", argv[i]);
+				}
 				while (NULL != (dp = readdir(dirp)))
 				{
 					if (dp->d_name[0] != '.')
 					{
 						name = ft_copystr(dp->d_name);
-						read_file(path, name, data, files);
+						read_ent(path, name, data, ents);
 					}
 				}
-				print_files(files);
-				free(files);
+				entlst_add_ents(data->entlst, ents);
 				closedir(dirp);
 			}
-			else
-				read_file(".", argv[i], data, NULL);
-			free(path);
 		}
-		i++;
 	}
+	return (1);
 }
 
 t_data	*data_init(void)
@@ -153,12 +90,10 @@ t_data	*data_init(void)
 
 	if (NULL == (data = (t_data *)malloc(sizeof(t_data))))
 		return (NULL);
-	if (NULL == (data->err = (t_err *)malloc(sizeof(t_err))))
+	if (NULL == (data->err = err_init()))
 		return (NULL);
-	if (NULL == (data->files = files_init()))
+	if (NULL == (data->entlst = entlst_init()))
 		return (NULL);
-	data->err->file = NULL;
-	data->err->next = NULL;
 	return (data);
 }
 
@@ -175,24 +110,11 @@ int main(int argc, char **argv)
 		return (-1);
 	data->cmds = get_commands(argc, argv);
 
-	if (!(data->cmds & CMD_R))
-	{
-		get_stat(argc, argv, data);
-		print_err(data->err);
-		print_files(data->files);
-	}
-	else
-	{
-		if (argc == 1)
-			recursion(".", data);
-		while (i < )
-	}
+	get_stat(argc, argv, data);
+	err(data->err, 1);
+	print_ents(data->entlst->ents);
 
-	//ft_printf("R %i l %i r %i a %i t %i T %i\n", (data->cmds & CMD_R), \
-	//	(data->cmds & CMD_l), (data->cmds & CMD_r), (data->cmds & CMD_a), \
-	//	(data->cmds & CMD_t), (data->cmds & CMD_T));
-
-	//ft_printf("%s", data->pw->pw_name);
+	// ft_printf("%s", data->pw->pw_name);
 	return (1);
 }
 

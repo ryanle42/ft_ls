@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: anonymous <anonymous@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/28 16:54:51 by rle               #+#    #+#             */
-/*   Updated: 2017/05/17 16:12:30 by rle              ###   ########.fr       */
+/*   Updated: 2017/05/21 23:03:59 by anonymous        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <stdarg.h>
 # include <unistd.h>
 # include <stdlib.h>
+# include <stdint.h>
 
 /*
 **	LIBFT STRUCTS
@@ -107,8 +108,7 @@ char				*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 int					ft_strequ(char const *s1, char const *s2);
 int					ft_strnequ(char const *s1, char const *s2, size_t n);
 char				*ft_strsub(char const *s, unsigned int start, size_t len);
-char				*ft_strjoin(char const *s1, char const *s2);
-char				*ft_strfreejoin(char *s1, char *s2);
+char				*ft_strjoin(char *s1, char *s2, int opt);
 char				*ft_strtrim(char const *s);
 char				**ft_strsplit(char const *s, char c);
 char				*ft_itoa(int n);

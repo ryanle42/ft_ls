@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rle <rle@student.42.fr>                    +#+  +:+       +#+         #
+#    By: anonymous <anonymous@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/28 09:03:31 by rle               #+#    #+#              #
-#    Updated: 2017/05/20 13:39:23 by rle              ###   ########.fr        #
+#    Updated: 2017/05/21 23:02:42 by anonymous        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,7 +56,6 @@ OBJ =	$(addprefix ./srcs/, \
 					ft_strnequ \
 					ft_strsub \
 					ft_strjoin \
-					ft_strfreejoin \
 					ft_strtrim \
 					ft_strtrim \
 					ft_strsplit \

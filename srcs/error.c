@@ -3,42 +3,59 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: anonymous <anonymous@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/18 19:56:39 by rle               #+#    #+#             */
-/*   Updated: 2017/05/18 20:01:13 by rle              ###   ########.fr       */
+/*   Updated: 2017/05/22 00:01:00 by anonymous        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ftls.h>
 
-void	add_err(t_err **err, char *file)
+t_err	*err_init(void)
+{
+	t_err *err;
+
+	if (NULL == (err = (t_err *)malloc(sizeof(t_err))))
+		return (NULL);
+	err->ent = NULL;
+	err->next = NULL;
+	return (err);
+}
+
+void	add_err(t_err **err, char *ent)
 {
 	t_err *curr;
 
 	curr = *err;
-	if (!curr->file)
+	if (!curr->ent)
 	{
-		curr->file = file;
+		curr->ent = ent;
 		return ;
 	}
 	while (curr->next)
 		curr = curr->next;
 	curr->next = (t_err *)malloc(sizeof(t_err));
 	curr = curr->next;
-	curr->file = file;
+	curr->ent = ent;
 	curr->next = NULL;
 }
 
-void	print_err(t_err *err)
+void	err(t_err *err, int errno)
 {
-	if (err->file)
-	{
-		ft_printf("./ft_ls: %s: No such file or directory\n", err->file);
-		while (err->next)
+	if (errno == 1)
+		if (err->ent)
 		{
-			err = err->next;
-			ft_printf("./ft_ls: %s: No such file or directory\n", err->file);
+			ft_printf("./ft_ls: %s: No such file or directory\n", err->ent);
+			while (err->next)
+			{
+				err = err->next;
+				ft_printf("./ft_ls: %s: No such file or directory\n", err->ent);
+			}
 		}
+	if (errno == 2)
+	{
+		ft_printf("Error adding file\n");
+		exit(1);
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ftls.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: anonymous <anonymous@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/16 19:28:16 by anonymous         #+#    #+#             */
-/*   Updated: 2017/05/21 15:35:27 by rle              ###   ########.fr       */
+/*   Updated: 2017/05/22 00:28:09 by anonymous        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,17 +25,29 @@ typedef struct			s_data
 {
 	int					cmds;
 	struct s_err		*err;
-	struct s_files		*files;
+	struct s_entlst		*entlst;
 }						t_data;
 
-typedef struct			s_files
+typedef struct			s_entlst
+{
+	struct s_entlst		*next;
+	struct s_ent		*ents;
+}						t_entlst;
+
+typedef struct			s_ent
 {
 	char				*name;
 	struct stat			sb;
 	struct passwd		*pw;
-	struct s_files		*next;
-	struct s_files		*prev;
-}						t_files;
+	struct s_ent		*next;
+	struct s_ent		*prev;
+}						t_ent;
+
+typedef struct		s_err
+{
+	char			*ent;
+	struct s_err	*next;
+}					t_err;
 
 typedef struct			s_sp
 {
@@ -53,12 +65,6 @@ enum				s_cmds
 	CMD_T = 32
 };
 
-typedef struct		s_err
-{
-	char			*file;
-	struct s_err	*next;
-}					t_err;
-
 /*
 **	get_commands
 */
@@ -68,25 +74,32 @@ int				get_commands(int argc, char **argv);
 /*
 **	error
 */
+t_err			*err_init(void);
 void			add_err(t_err **err, char *file);
-void			print_err(t_err *err);
-
+void			err(t_err *err, int errno);
 
 /*
-**	files
+**	ent
 */
-int				add_file(char *path, char *name, t_files *head);
-void			print_files(t_files *head);
+t_ent			*ent_init(void);
+int				add_ent(char *path, char *name, t_ent *head);
+void			print_ents(t_ent *head);
 
 /*
 **	listxattr
 */
-void			get_listxattr(char *name);
 
 /*
 **	get_sperm
 */
 char			*get_sperm(int mode);
+
+
+/*
+**	entlst
+*/
+t_entlst		*entlst_init(void);
+void			entlst_add_ents(t_entlst *entlst, t_ent *ents);
 
 /*
 struct passwd {

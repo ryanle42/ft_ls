@@ -1,21 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   files.c                                            :+:      :+:    :+:   */
+/*   ent.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: anonymous <anonymous@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/18 21:19:50 by rle               #+#    #+#             */
-/*   Updated: 2017/05/21 15:38:36 by rle              ###   ########.fr       */
+/*   Updated: 2017/05/22 00:24:06 by anonymous        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ftls.h>
 
-int	add_file(char *path, char *name, t_files *head)
+t_ent		*ent_init(void)
 {
-	t_files *curr;
-	t_files *prev;
+	t_ent *ent;
+
+	if (NULL == (ent = (t_ent *)malloc(sizeof(t_ent))))
+		return (NULL);
+	ent->name = NULL;
+	ent->next = NULL;
+	ent->prev = NULL;
+	return (ent);
+}
+
+int	add_ent(char *path, char *name, t_ent *head)
+{
+	t_ent *curr;
+	t_ent *prev;
 
 	curr = head;
 	if (!curr->name)
@@ -28,7 +40,7 @@ int	add_file(char *path, char *name, t_files *head)
 	}
 	while (curr->next)
 		curr = curr->next;
-	if (NULL == (curr->next = (t_files *)malloc(sizeof(t_files))))
+	if (NULL == (curr->next = (t_ent *)malloc(sizeof(t_ent))))
 		return (-1);
 	prev = curr;
 	curr = curr->next;
@@ -41,7 +53,7 @@ int	add_file(char *path, char *name, t_files *head)
 	return (1);
 }
 
-void	calc_spaces(t_files *head, t_sp *spaces, long *total)
+void	calc_spaces(t_ent *head, t_sp *spaces, long *total)
 {
 	spaces->fl_sz = 0;
 	spaces->links = 0;
@@ -59,7 +71,7 @@ void	calc_spaces(t_files *head, t_sp *spaces, long *total)
 }
 
 
-void	print_files(t_files *head)
+void	print_ents(t_ent *head)
 {
 	char *tmp;
 	t_sp spaces;
