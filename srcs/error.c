@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anonymous <anonymous@student.42.fr>        +#+  +:+       +#+        */
+/*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/18 19:56:39 by rle               #+#    #+#             */
-/*   Updated: 2017/05/22 00:01:00 by anonymous        ###   ########.fr       */
+/*   Updated: 2017/05/22 20:57:03 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ void	add_err(t_err **err, char *ent)
 	}
 	while (curr->next)
 		curr = curr->next;
-	curr->next = (t_err *)malloc(sizeof(t_err));
+	if (NULL == (curr->next = (t_err *)malloc(sizeof(t_err))))
+		return (NULL);
 	curr = curr->next;
 	curr->ent = ent;
 	curr->next = NULL;

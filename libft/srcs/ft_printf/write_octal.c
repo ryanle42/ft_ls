@@ -6,7 +6,7 @@
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/05 13:46:39 by rle               #+#    #+#             */
-/*   Updated: 2017/05/07 22:57:44 by rle              ###   ########.fr       */
+/*   Updated: 2017/05/22 17:15:09 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void		write_octal(t_param *params, uintmax_t n)
 	length = ft_strlen(str);
 	str = ft_strrev(str, length);
 	calc_sp_n_zeros(params, length);
-	str = ft_strfreejoin(make_prefix(params, str), str);
+	str = ft_strjoin(make_prefix(params, str), str, 3);
 	if (!params->flags->minus)
 		write_spaces(params);
 	ft_putstr(str);

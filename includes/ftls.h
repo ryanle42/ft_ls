@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ftls.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anonymous <anonymous@student.42.fr>        +#+  +:+       +#+        */
+/*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/16 19:28:16 by anonymous         #+#    #+#             */
-/*   Updated: 2017/05/22 00:28:09 by anonymous        ###   ########.fr       */
+/*   Updated: 2017/05/22 21:08:37 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,21 @@
 # include <sys/types.h>
 # include <sys/xattr.h>
 # include <pwd.h>
+# include <stdio.h>
+# include <errno.h>
+# include <string.h>
 
 typedef struct			s_data
 {
 	int					cmds;
 	struct s_err		*err;
+	struct s_entlst		*singent;
 	struct s_entlst		*entlst;
 }						t_data;
 
 typedef struct			s_entlst
 {
+	char				*path;
 	struct s_entlst		*next;
 	struct s_ent		*ents;
 }						t_entlst;

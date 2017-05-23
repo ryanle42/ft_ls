@@ -6,7 +6,7 @@
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/05 12:45:56 by rle               #+#    #+#             */
-/*   Updated: 2017/05/07 22:58:54 by rle              ###   ########.fr       */
+/*   Updated: 2017/05/22 17:15:20 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void		write_ptr(t_param *params, long int n)
 	if (n == 0)
 		str = "0x0";
 	if (n != 0)
-		str = ft_strjoin("0x", str);
+		str = ft_strjoin("0x", str, 0);
 	calc_sp_n_zeros(params, ft_strlen(str));
 	if (!params->flags->minus)
 		write_spaces(params);

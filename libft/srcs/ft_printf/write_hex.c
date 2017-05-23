@@ -6,7 +6,7 @@
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/05 12:38:55 by rle               #+#    #+#             */
-/*   Updated: 2017/04/05 15:18:13 by rle              ###   ########.fr       */
+/*   Updated: 2017/05/22 17:14:43 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,9 +81,9 @@ void		write_hex(t_param *params, uintmax_t n, int letters)
 	if (params->flags->hash && n != 0 && !params->flags->zero)
 	{
 		if (letters == 0)
-			str = ft_strjoin("0x", str);
+			str = ft_strjoin("0x", str, 0);
 		else
-			str = ft_strjoin("0X", str);
+			str = ft_strjoin("0X", str, 0);
 	}
 	if (params->flags->hash && n != 0 && params->flags->zero)
 		hash_except(params, letters);
