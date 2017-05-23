@@ -6,7 +6,7 @@
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/16 20:07:42 by anonymous         #+#    #+#             */
-/*   Updated: 2017/05/22 21:17:28 by rle              ###   ########.fr       */
+/*   Updated: 2017/05/23 14:39:34 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ t_data	*data_init(void)
 **		(data->cmds & CMD_a), (data->cmds & CMD_t), (data->cmds & CMD_T));
 */
 
-int main()
+int main(int argc, char **argv)
 {
 	t_data *data;
 
