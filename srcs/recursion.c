@@ -6,7 +6,7 @@
 /*   By: anonymous <anonymous@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/21 23:39:36 by anonymous         #+#    #+#             */
-/*   Updated: 2017/05/21 23:39:43 by anonymous        ###   ########.fr       */
+/*   Updated: 2017/05/23 22:12:35 by anonymous        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,23 +19,20 @@ void	recursion(char *path, t_data *data)
 	struct dirent *dp;
 	t_ent *ents;
 
-	if (NULL == (files = files_init()))
+	if (NULL == (ents = ent_init()))
 		return ;
 	if (NULL != (dirp = opendir(path)))
 	{
-		if (ft_strcmp(path, ".") != 0)
-			ft_printf("\n%s:\n", path);
-		path = ft_strjoin(path, "/", 0);
 		while (NULL != (dp = readdir(dirp)))
 		{
 			if (dp->d_name[0] != '.')
 			{
 				name = ft_copystr(dp->d_name);
-				read_file(path, name, data, files);
+				read_ent(path, name, data, ents);
 			}
 		}
 		closedir(dirp);
-		print_files(files);
+		entlst_add_ents(data->entlst, ents, path);
 	}
 	else
 		return ;
@@ -47,8 +44,7 @@ void	recursion(char *path, t_data *data)
 				ft_strcmp(dp->d_name, ".") != 0 && \
 				ft_strcmp(dp->d_name, "..") != 0)
 			{
-				name = ft_strjoin(path, dp->d_name, 0);
-				recursion(name, data);
+				recursion(get_fpath(path, dp->d_name), data);
 			}
 		}
 		closedir(dirp);

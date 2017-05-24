@@ -6,7 +6,7 @@
 #    By: anonymous <anonymous@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/05/16 18:47:59 by rle               #+#    #+#              #
-#    Updated: 2017/05/21 23:56:45 by anonymous        ###   ########.fr        #
+#    Updated: 2017/05/23 21:03:56 by anonymous        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,6 +20,8 @@ OBJS = $(addprefix ./srcs/, \
 				ent \
 				entlst \
 				get_sperm \
+				helpers \
+				recursion \
 			) \
 		)
 

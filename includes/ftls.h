@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ftls.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: anonymous <anonymous@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/16 19:28:16 by anonymous         #+#    #+#             */
-/*   Updated: 2017/05/23 15:08:21 by rle              ###   ########.fr       */
+/*   Updated: 2017/05/23 21:11:14 by anonymous        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 typedef struct			s_data
 {
 	int					cmds;
-	struct s_err		*err;
+	struct s_error		*errors;
 	struct s_entlst		*singent;
 	struct s_entlst		*entlst;
 }						t_data;
@@ -58,7 +58,7 @@ typedef struct			s_errlst
 {	
 	char				*name;
 	char				*msg;
-	struct s_error		*next;
+	struct s_errlst		*next;
 }						t_errlst;
 
 typedef struct			s_sp
@@ -84,11 +84,20 @@ enum					s_cmds
 int						get_commands(int argc, char **argv);
 
 /*
+**	helpers
+*/
+char					*name_from_path(char *path);
+char					*get_fpath(char *path, char *name);
+void					read_ent(char *path, char *name, t_data *data, t_ent *ents);
+
+/*
 **	error
 */
-t_err					*err_init(void);
-void					add_err(t_err **err, char *file);
-void					err(t_err *err, int errno);
+t_error					*errors_init(void);
+t_errlst				*errlst_init(void);
+void					add_pdeny(t_errlst *head, char *path);
+void					add_nofile(t_errlst *head, char *name);
+void					print_errlst(t_errlst *error);
 
 /*
 **	ent
@@ -111,7 +120,12 @@ char					*get_sperm(int mode);
 **	entlst
 */
 t_entlst				*entlst_init(void);
-void					entlst_add_ents(t_entlst *entlst, t_ent *ents);
+void					entlst_add_ents(t_entlst *entlst, t_ent *ents, char *path);
+
+/*
+**	recursion
+*/
+void					recursion(char *path, t_data *data);
 
 /*
 struct passwd {

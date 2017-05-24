@@ -3,25 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: anonymous <anonymous@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/16 20:07:42 by anonymous         #+#    #+#             */
-/*   Updated: 2017/05/23 14:39:34 by rle              ###   ########.fr       */
+/*   Updated: 2017/05/23 22:16:48 by anonymous        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ftls.h>
-
-void	read_ent(char *path, char *name, t_data *data, t_ent *ents)
-{
-	struct stat sb;
-
-	path = ft_strjoin(path, name, 0);
-	if (-1 == (stat(path, &sb)))
-		add_err(&(data->err), name);
-	else if (-1 == add_ent(path, name, ents))
-		err(NULL, 2);
-}
 
 int	get_stat(int argc, char **argv, t_data *data)
 {
@@ -35,55 +24,59 @@ int	get_stat(int argc, char **argv, t_data *data)
 	i = 0;
 	if (argc == 1)
 	{
-		if (NULL == (ents = ent_init()))
-			return (-1);
-		if (NULL == (dirp = opendir(".")))
+		if (data->cmds & CMD_R)
+			recursion(".", data);
+		else
 		{
-			ft_printf("Cannot open .");
-			exit(1);
-		}
-		while (NULL != (dp = readdir(dirp)))
-		{
-			if (dp->d_name[0] != '.')
+			if (NULL == (ents = ent_init()))
+				return (-1);
+			if (NULL == (dirp = opendir(".")))
 			{
-				name = ft_copystr(dp->d_name);
-				read_ent("./", name, data, ents);
+				ft_printf("Cannot open .");
+				exit(1);
 			}
+			while (NULL != (dp = readdir(dirp)))
+			{
+				if (dp->d_name[0] != '.')
+				{
+					name = ft_copystr(dp->d_name);
+					read_ent(".", name, data, ents);
+				}
+			}
+			entlst_add_ents(data->entlst, ents, ".");
+			closedir(dirp);
 		}
-		entlst_add_ents(data->entlst, ents);
-		closedir(dirp);
 	}
 	while (++i < argc)
 	{
 		if (argv[i][0] != '-')
 		{
+
 			if (NULL == (ents = ent_init()))
 				return (-1);
-			path = ft_strjoin(argv[i], "/", 0);
+			path = argv[i];
 			if (NULL != (dirp = opendir(path)))
 			{
-				// if (argc > 2)
-				// {
-				// 	if (i != 1)
-				// 		ft_printf("\n");
-				// 	ft_printf("%s:\n", argv[i]);
-				// }
-				while (NULL != (dp = readdir(dirp)))
+				if (data->cmds & CMD_R)
+					recursion(path, data);
+				else
 				{
-					if (dp->d_name[0] != '.')
+					while (NULL != (dp = readdir(dirp)))
 					{
-						name = ft_copystr(dp->d_name);
-						read_ent(path, name, data, ents);
+						if (dp->d_name[0] != '.')
+						{
+							name = ft_copystr(dp->d_name);
+							read_ent(path, name, data, ents);
+						}
 					}
+					entlst_add_ents(data->entlst, ents, argv[i]);
 				}
-				entlst_add_ents(data->entlst, ents);
-				data->entlst->path = argv[i];
 				closedir(dirp);
 			}
 			else
 			{
-				read_ent("./", argv[i], data, ents);
-				entlst_add_ents(data->singent, ents);
+				read_ent(".", path, data, ents);
+				entlst_add_ents(data->singent, ents, ".");
 			}
 		}
 	}
@@ -96,7 +89,7 @@ t_data	*data_init(void)
 
 	if (NULL == (data = (t_data *)malloc(sizeof(t_data))))
 		return (NULL);
-	if (NULL == (data->err = err_init()))
+	if (NULL == (data->errors = errors_init()))
 		return (NULL);
 	if (NULL == (data->entlst = entlst_init()))
 		return (NULL);
@@ -110,6 +103,30 @@ t_data	*data_init(void)
 **		(data->cmds & CMD_a), (data->cmds & CMD_t), (data->cmds & CMD_T));
 */
 
+void	print_singent(t_data *data)
+{
+	while (data->singent)
+	{
+		if (data->singent->ents)
+			print_ents(data->singent->ents);
+		data->singent = data->singent->next;
+	}
+}
+
+void	print_entlst(t_data *data, int argc)
+{
+	while (data->entlst)
+	{
+		if (data->entlst->ents)
+		{
+			if (argc > 2 || data->cmds & CMD_R)
+				ft_printf("%s:\n", data->entlst->path);
+			print_ents(data->entlst->ents);
+		}
+		data->entlst = data->entlst->next;
+	}	
+}
+
 int main(int argc, char **argv)
 {
 	t_data *data;
@@ -117,27 +134,11 @@ int main(int argc, char **argv)
 	if (NULL == (data = data_init()))
 		return (-1);
 	data->cmds = get_commands(argc, argv);
-
 	get_stat(argc, argv, data);
-	err(data->err, 1);
-
-	// while (data->singent)
-	// {
-	// 	if (data->singent->ents)
-	// 		print_ents(data->singent->ents);
-	// 	data->singent = data->singent->next;
-	// }
-	// while (data->entlst)
-	// {
-	// 	if (data->entlst->ents)
-	// 	{
-	// 		if (argc > 2)
-	// 			ft_printf("%s:\n", data->entlst->path);
-	// 		print_ents(data->entlst->ents);
-	// 	}
-	// 	data->entlst = data->entlst->next;
-	// }
-	print_ents(data->entlst->ents);
+	print_errlst(data->errors->nofile);
+	print_singent(data);
+	print_errlst(data->errors->pdeny);
+	print_entlst(data, argc);
 	return (0);
 }
 

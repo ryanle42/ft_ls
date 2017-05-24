@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ent.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: anonymous <anonymous@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/18 21:19:50 by rle               #+#    #+#             */
-/*   Updated: 2017/05/22 19:41:32 by rle              ###   ########.fr       */
+/*   Updated: 2017/05/23 20:41:27 by anonymous        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void	print_ents(t_ent *head)
 	t_sp spaces;
 	long total;
 
-	if (head)
+	if (head && head->name)
 	{
 		calc_spaces(head, &spaces, &total);
 		ft_printf("total %li\n", total);

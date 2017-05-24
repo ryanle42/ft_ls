@@ -6,7 +6,7 @@
 /*   By: anonymous <anonymous@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/21 23:26:38 by anonymous         #+#    #+#             */
-/*   Updated: 2017/05/22 00:27:17 by anonymous        ###   ########.fr       */
+/*   Updated: 2017/05/23 21:10:54 by anonymous        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,19 +23,23 @@ t_entlst	*entlst_init(void)
 	return (entlst);
 }
 
-void		entlst_add_ents(t_entlst *entlst, t_ent *ents)
+void		entlst_add_ents(t_entlst *entlst, t_ent *ents, char *path)
 {
 	t_entlst *curr;
 
 	curr = entlst;
 	if (!curr->ents)
+	{
+		curr->path = path;
 		curr->ents = ents;
+	}
 	else
 	{
 		while (curr->next)
 			curr = curr->next;
 		curr->next = (t_entlst *)malloc(sizeof(t_entlst));
 		curr = curr->next;
+		curr->path = path;
 		curr->ents = ents;
 		curr->next = NULL;
 	}

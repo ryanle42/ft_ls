@@ -3,65 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: anonymous <anonymous@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/18 19:56:39 by rle               #+#    #+#             */
-/*   Updated: 2017/05/23 15:22:09 by rle              ###   ########.fr       */
+/*   Updated: 2017/05/23 20:34:32 by anonymous        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ftls.h>
 
-t_err	*err_init(void)
+t_error	*errors_init(void)
 {
-	t_err *err;
+	t_error *error;
 
-	if (NULL == (err = (t_err *)malloc(sizeof(t_err))))
+	if (NULL == (error = (t_error *)malloc(sizeof(t_error))))
 		return (NULL);
-	err->ent = NULL;
-	err->next = NULL;
-	return (err);
-}
-
-void	add_err(t_err **err, char *ent)
-{
-	t_err *curr;
-
-	curr = *err;
-	if (!curr->ent)
-	{
-		curr->ent = ent;
-		return ;
-	}
-	while (curr->next)
-		curr = curr->next;
-	if (NULL == (curr->next = (t_err *)malloc(sizeof(t_err))))
-		return (NULL);
-	curr = curr->next;
-	curr->ent = ent;
-	curr->next = NULL;
-}
-char	*name_from_path(char *path)
-{
-	int i;
-	int j;
-	char *name;
-
-	j = 0;
-	i = 0;
-	while (path[i])
-		i++;
-	while (path[i] != '/' && i >= 0)
-	{
-		j++;
-		i++;
-	}
-	name = (char *)malloc(sizeof(char) * j + 1);
-	j = 0;
-	while (path[i])
-		name[j++] = path[i++];
-	name[j] = '\0';
-	return (name);
+	error->nofile = errlst_init();
+	error->pdeny = errlst_init();
+	return (error);
 }
 
 t_errlst	*errlst_init(void)
@@ -73,6 +32,7 @@ t_errlst	*errlst_init(void)
 	errlst->name = NULL;
 	errlst->msg = NULL;
 	errlst->next = NULL;
+	return (errlst);
 }
 
 char	*pdeny_msg(char *path, char *name)
@@ -103,6 +63,7 @@ void	add_pdeny(t_errlst *head, char *path)
 		while (curr->next)
 			curr = curr->next;
 		curr->next = errlst_init();
+		curr = curr->next;
 		curr->name = name;
 		curr->msg = pdeny_msg(path, name);
 	}
@@ -112,15 +73,14 @@ char	*nofile_msg(char *name)
 {
 	char *msg;
 
-	msg = ft_strjoin("./ft_ls: ", name);
-	msg = ft_strjoin(msg, ": No such file or directory");
+	msg = ft_strjoin("./ft_ls: ", name, 0);
+	msg = ft_strjoin(msg, ": No such file or directory", 1);
 	return (msg);
 }
 
 void	add_nofile(t_errlst *head, char *name)
 {
 	t_errlst	*curr;
-	char		*name;
 
 	curr = head;
 	if (!curr->name)
@@ -133,30 +93,21 @@ void	add_nofile(t_errlst *head, char *name)
 		while (curr->next)
 			curr = curr->next;
 		curr->next = errlst_init();
+		curr = curr->next;
 		curr->name = name;
 		curr->msg = nofile_msg(name);
 	}
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+void	print_errlst(t_errlst *error)
+{
+	if (error && error->msg)
+	{
+		while (error && error->msg)
+		{
+			ft_printf("%s\n", error->msg);
+			error = error->next;
+		}
+		ft_printf("\n");
+	}
+}
