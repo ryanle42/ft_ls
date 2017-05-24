@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ftls.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anonymous <anonymous@student.42.fr>        +#+  +:+       +#+        */
+/*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/16 19:28:16 by anonymous         #+#    #+#             */
-/*   Updated: 2017/05/23 21:11:14 by anonymous        ###   ########.fr       */
+/*   Updated: 2017/05/24 16:40:19 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ typedef struct			s_sp
 {
 	int					fl_sz;
 	int					links;
+	int					name;
+	int					files;
 }						t_sp;
 
 enum					s_cmds
@@ -104,7 +106,7 @@ void					print_errlst(t_errlst *error);
 */
 t_ent					*ent_init(void);
 int						add_ent(char *path, char *name, t_ent *head);
-void					print_ents(t_ent *head);
+void					print_ents(t_ent *head, t_data *data);
 
 /*
 **	listxattr
