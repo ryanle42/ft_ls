@@ -6,7 +6,7 @@
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/20 13:36:05 by rle               #+#    #+#             */
-/*   Updated: 2017/05/20 13:52:17 by rle              ###   ########.fr       */
+/*   Updated: 2017/05/26 15:08:00 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,6 @@ static int filetypeletter(int mode)
 #ifdef S_ISSOCK
 	else if (S_ISSOCK(mode))
 		c = 's';
-#endif
-#ifdef S_ISDOOR
-	else if (S_ISDOOR(mode))
-		c = 'D';
 #endif
 	else
 		c = '?';

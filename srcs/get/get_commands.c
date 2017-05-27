@@ -6,26 +6,12 @@
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/17 14:02:12 by rle               #+#    #+#             */
-/*   Updated: 2017/05/21 15:29:44 by rle              ###   ########.fr       */
+/*   Updated: 2017/05/26 15:33:54 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ftls.h>
 
-/*
-static t_cmd	*cmd_init(void)
-{
-	t_cmd *cmds;
-
-	cmds = (t_cmd*)malloc(sizeof(t_cmd));
-	cmds->l = 0;
-	cmds->R = 0;
-	cmds->r = 0;
-	cmds->a = 0;
-	cmds->t = 0;
-	return (cmds);
-}
-*/
 static int		set_cmd(int *cmds, char cmd)
 {
 	if (cmd == 'l')
@@ -53,21 +39,18 @@ int			get_commands(int argc, char **argv)
 
 	cmds = 0;
 	i = 1;
-	while (i < argc)
+	while (i < argc && argv[i][0] == '-')
 	{
 		j = 1;
-		if (argv[i][0] == '-')
+		while (argv[i][j])
 		{
-			while (argv[i][j])
+			if (-1 == (set_cmd(&cmds, argv[i][j])))
 			{
-				if (-1 == (set_cmd(&cmds, argv[i][j])))
-				{
-					ft_printf("./ft_ls: illegal option -- %c\n", argv[i][j]);
-					ft_printf("usage: ./ft_ls [-Ralrt] [file ...]\n");
-					exit(1);
-				}
-				j++;
+				ft_printf("./ft_ls: illegal option -- %c\n", argv[i][j]);
+				ft_printf("usage: ./ft_ls [-Ralrt] [file ...]\n");
+				exit(1);
 			}
+			j++;
 		}
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/23 20:20:57 by anonymous         #+#    #+#             */
-/*   Updated: 2017/05/24 15:22:12 by rle              ###   ########.fr       */
+/*   Updated: 2017/05/26 15:49:51 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,20 +42,4 @@ char *get_fpath(char *path, char *name)
 	fpath = ft_strjoin(path, "/", 0);
 	fpath = ft_strjoin(fpath, name, 0);
 	return (fpath);
-}
-
-void	read_ent(char *path, char *name, t_data *data, t_ent *ents)
-{
-	struct stat	sb;
-	char		*fpath;
-
-	fpath = get_fpath(path, name);
-	stat(fpath, &sb);
-	if (errno == ENOENT)
-		add_nofile(data->errors->nofile, name);
-	else if (errno == EACCES)
-		add_pdeny(data->errors->pdeny, path);
-	else if (-1 == add_ent(fpath, name, ents))
-		exit(1);
-	errno = 0;
 }

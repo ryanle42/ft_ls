@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: anonymous <anonymous@student.42.fr>        +#+  +:+       +#+         #
+#    By: rle <rle@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/05/16 18:47:59 by rle               #+#    #+#              #
-#    Updated: 2017/05/23 21:03:56 by anonymous        ###   ########.fr        #
+#    Updated: 2017/05/26 19:41:07 by rle              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,12 +14,43 @@ NAME = ft_ls
 
 OBJS = $(addprefix ./srcs/, \
 			$(addsuffix .o, \
+				$(addprefix names/, \
+					names_init \
+					add_name \
+					smrt_name_insrt \
+				) \
+				$(addprefix sort/, \
+					is_sorted \
+					sort_names \
+				) \
+				$(addprefix ent/, \
+					ent_init \
+					read_ent \
+					add_ent \
+				) \
+				$(addprefix print/, \
+					print_singent \
+					print_entlst \
+					print_errlst \
+					print_ents \
+					print_helpers \
+					print_l \
+				) \
+				$(addprefix get/, \
+					get_commands \
+					get_sperm \
+				) \
+				$(addprefix init/, \
+					entlst_init \
+				) \
+				$(addprefix error/, \
+					errors_init \
+					nofile \
+					pdeny \
+					errlst_init \
+				) \
 				main \
-				get_commands \
-				error \
-				ent \
 				entlst \
-				get_sperm \
 				helpers \
 				recursion \
 			) \

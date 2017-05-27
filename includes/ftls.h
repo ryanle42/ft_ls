@@ -6,7 +6,7 @@
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/16 19:28:16 by anonymous         #+#    #+#             */
-/*   Updated: 2017/05/24 16:40:19 by rle              ###   ########.fr       */
+/*   Updated: 2017/05/26 19:42:23 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <sys/types.h>
 # include <sys/xattr.h>
 # include <pwd.h>
+# include <grp.h>
 # include <stdio.h>
 # include <errno.h>
 # include <string.h>
@@ -27,6 +28,7 @@
 typedef struct			s_data
 {
 	int					cmds;
+	int					num_ents;
 	struct s_error		*errors;
 	struct s_entlst		*singent;
 	struct s_entlst		*entlst;
@@ -44,6 +46,7 @@ typedef struct			s_ent
 	char				*name;
 	struct stat			sb;
 	struct passwd		*pw;
+	struct group		*grp;
 	struct s_ent		*next;
 	struct s_ent		*prev;
 }						t_ent;
@@ -68,6 +71,12 @@ typedef struct			s_sp
 	int					name;
 	int					files;
 }						t_sp;
+
+typedef struct			s_names
+{
+	char				*name;
+	struct s_names		*next;
+}						t_names;
 
 enum					s_cmds
 {
@@ -99,14 +108,12 @@ t_error					*errors_init(void);
 t_errlst				*errlst_init(void);
 void					add_pdeny(t_errlst *head, char *path);
 void					add_nofile(t_errlst *head, char *name);
-void					print_errlst(t_errlst *error);
 
 /*
 **	ent
 */
 t_ent					*ent_init(void);
 int						add_ent(char *path, char *name, t_ent *head);
-void					print_ents(t_ent *head, t_data *data);
 
 /*
 **	listxattr
@@ -130,6 +137,49 @@ void					entlst_add_ents(t_entlst *entlst, t_ent *ents, char *path);
 void					recursion(char *path, t_data *data);
 
 /*
+**	sort
+*/
+int						is_sorted(char *str1, char *str2);
+void					sort_names(int i, int max, char **argv);
+void					smrt_name_insrt(t_names *head, char *name);
+
+/*
+**	ent/
+*/
+void					read_ent(char *path, char *name, t_data *data, t_ent *ents);
+t_ent					*ent_init(void);
+int						add_ent(char *path, char *name, t_ent *head);
+
+/*
+**	print/
+*/
+void					print_ents(t_ent *head, t_data *data);
+void					print_l(t_ent *head, t_sp spaces);
+void					calc_spaces(t_ent *head, t_sp *spaces);
+void					print_errlst(t_errlst *error);
+void					print_entlst(t_data *data);
+void					print_singent(t_data *data);
+long					calc_total(t_ent *head);
+/*
+**	init/
+*/
+t_errlst				*errlst_init(void);
+t_entlst				*entlst_init(void);
+
+/*
+**	error/
+*/
+t_error					*errors_init(void);
+void					add_pdeny(t_errlst *head, char *path);
+void					add_nofile(t_errlst *head, char *name);
+
+/*
+**	names/
+*/
+t_names					*names_init(void);
+void					add_name(t_names *head, char *name);
+/*
+void	add_pdeny(t_errlst *head, char *path);
 struct passwd {
 	char *pw_name;
 	char *pw_passwd;
