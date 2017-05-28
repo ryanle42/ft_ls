@@ -6,7 +6,7 @@
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/26 15:16:19 by rle               #+#    #+#             */
-/*   Updated: 2017/05/26 15:59:51 by rle              ###   ########.fr       */
+/*   Updated: 2017/05/27 19:09:40 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	add_pdeny(t_errlst *head, char *path)
 	{
 		curr->name = name;
 		curr->msg = pdeny_msg(name);
+		curr->path = path;
 	}
 	else
 	{
@@ -42,5 +43,6 @@ void	add_pdeny(t_errlst *head, char *path)
 		curr = curr->next;
 		curr->name = name;
 		curr->msg = pdeny_msg(name);
+		curr->path = path;
 	}
 }

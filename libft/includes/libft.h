@@ -6,7 +6,7 @@
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/28 16:54:51 by rle               #+#    #+#             */
-/*   Updated: 2017/05/26 18:39:13 by rle              ###   ########.fr       */
+/*   Updated: 2017/05/27 18:53:31 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ char				*ft_strsub(char const *s, unsigned int start, size_t len);
 char				*ft_strjoin(char *s1, char *s2, int opt);
 char				*ft_strtrim(char const *s);
 char				**ft_strsplit(char const *s, char c);
-void				ft_strswap(char *str1, char *str2);
+void				ft_strswap(char **str1, char **str2);
 char				*ft_itoa(int n);
 void				ft_putchar(char c);
 void				ft_putstr(char const *s);

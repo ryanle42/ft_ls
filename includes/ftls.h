@@ -6,7 +6,7 @@
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/16 19:28:16 by anonymous         #+#    #+#             */
-/*   Updated: 2017/05/26 19:42:23 by rle              ###   ########.fr       */
+/*   Updated: 2017/05/27 18:29:56 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ typedef struct			s_error
 typedef struct			s_errlst
 {	
 	char				*name;
+	char				*path;
 	char				*msg;
 	struct s_errlst		*next;
 }						t_errlst;
@@ -141,7 +142,7 @@ void					recursion(char *path, t_data *data);
 */
 int						is_sorted(char *str1, char *str2);
 void					sort_names(int i, int max, char **argv);
-void					smrt_name_insrt(t_names *head, char *name);
+void					sort_add_name(t_names *head, char *name);
 
 /*
 **	ent/
@@ -156,10 +157,12 @@ int						add_ent(char *path, char *name, t_ent *head);
 void					print_ents(t_ent *head, t_data *data);
 void					print_l(t_ent *head, t_sp spaces);
 void					calc_spaces(t_ent *head, t_sp *spaces);
-void					print_errlst(t_errlst *error);
+void					print_errlst(t_errlst *error, int i);
 void					print_entlst(t_data *data);
 void					print_singent(t_data *data);
 long					calc_total(t_ent *head);
+void					print_names(t_names *names);
+
 /*
 **	init/
 */

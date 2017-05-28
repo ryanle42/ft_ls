@@ -6,7 +6,7 @@
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/26 15:10:48 by rle               #+#    #+#             */
-/*   Updated: 2017/05/26 15:11:30 by rle              ###   ########.fr       */
+/*   Updated: 2017/05/27 18:45:50 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,5 +21,6 @@ t_errlst	*errlst_init(void)
 	errlst->name = NULL;
 	errlst->msg = NULL;
 	errlst->next = NULL;
+	errlst->path = NULL;
 	return (errlst);
 }

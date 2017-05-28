@@ -6,7 +6,7 @@
 #    By: rle <rle@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/05/16 18:47:59 by rle               #+#    #+#              #
-#    Updated: 2017/05/26 19:41:07 by rle              ###   ########.fr        #
+#    Updated: 2017/05/27 17:46:58 by rle              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ OBJS = $(addprefix ./srcs/, \
 				$(addprefix names/, \
 					names_init \
 					add_name \
-					smrt_name_insrt \
+					sort_add_name \
 				) \
 				$(addprefix sort/, \
 					is_sorted \
@@ -35,6 +35,7 @@ OBJS = $(addprefix ./srcs/, \
 					print_ents \
 					print_helpers \
 					print_l \
+					print_names \
 				) \
 				$(addprefix get/, \
 					get_commands \

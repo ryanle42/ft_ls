@@ -1,30 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_errlst.c                                     :+:      :+:    :+:   */
+/*   print_names.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/05/26 15:14:14 by rle               #+#    #+#             */
-/*   Updated: 2017/05/27 19:16:28 by rle              ###   ########.fr       */
+/*   Created: 2017/05/27 17:46:41 by rle               #+#    #+#             */
+/*   Updated: 2017/05/27 17:46:50 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ftls.h>
 
-void	print_errlst(t_errlst *error, int i)
+void	print_names(t_names *names)
 {
-	if (error && error->msg)
+	t_names *curr;
+
+	curr = names;
+	while (curr && curr->name)
 	{
-		while (error && error->msg)
-		{
-			if (i > 1)
-				ft_printf("%s:\n", error->path);
-			ft_printf("%s", error->msg);
-			if (error->next)
-				ft_printf("\n");
-			error = error->next;
-		}
-		ft_printf("\n");
+		ft_printf("%s ", curr->name);
+		curr = curr->next;
 	}
+	ft_printf("\n");
 }

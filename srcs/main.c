@@ -6,24 +6,12 @@
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/16 20:07:42 by anonymous         #+#    #+#             */
-/*   Updated: 2017/05/26 20:06:15 by rle              ###   ########.fr       */
+/*   Updated: 2017/05/27 19:16:22 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ftls.h>
 
-void	print_names(t_names *names)
-{
-	t_names *curr;
-
-	curr = names;
-	while (curr && curr->name)
-	{
-		ft_printf("%s ", curr->name);
-		curr = curr->next;
-	}
-	ft_printf("\n");
-}
 int	entlst_from_path(char *path, t_data *data)
 {
 	DIR *dirp;
@@ -41,10 +29,7 @@ int	entlst_from_path(char *path, t_data *data)
 		else
 		{
 			while (NULL != (dp = readdir(dirp)))
-			{
-				smrt_name_insrt(names, ft_copystr(dp->d_name));
-				//print_names(names);
-			}
+				sort_add_name(names, ft_copystr(dp->d_name));
 			while (names && names->name)
 			{
 				if ((data->cmds & CMD_a) || names->name[0] != '.')
@@ -58,7 +43,7 @@ int	entlst_from_path(char *path, t_data *data)
 	else
 	{
 		if (errno == EACCES)
-			add_pdeny(data->errors->nofile, path);
+			add_pdeny(data->errors->pdeny, path);
 		else
 		{
 			read_ent(".", path, data, ents);
@@ -120,9 +105,9 @@ int main(int argc, char **argv)
 	data->cmds = get_commands(argc, argv);
 	parse_params(argc, argv, data);
 	sort_names(1, argc, argv);
-	print_errlst(data->errors->nofile);
+	print_errlst(data->errors->nofile, 0);
 	print_singent(data);
-	print_errlst(data->errors->pdeny);
+	print_errlst(data->errors->pdeny, data->num_ents);
 	print_entlst(data);
 	return (0);
 }
