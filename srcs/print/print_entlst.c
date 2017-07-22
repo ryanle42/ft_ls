@@ -6,7 +6,7 @@
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/26 15:23:59 by rle               #+#    #+#             */
-/*   Updated: 2017/05/27 19:17:14 by rle              ###   ########.fr       */
+/*   Updated: 2017/07/17 15:08:34 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ void	print_entlst(t_data *data)
 	{
 		if (data->entlst->ents)
 		{
-			if (i != 0 || data->errors->pdeny->msg)
+			if (i != 0)
 				ft_printf("\n");
 			if (data->num_ents > 1)
 				ft_printf("%s:\n", data->entlst->path);
 			else if (i > 0)
 				ft_printf("%s:\n", data->entlst->path);
-			if (data->cmds & CMD_l)
+			if (data->cmds & CMD_l && !(data->entlst->ents->err))
 				ft_printf("total %li\n", calc_total(data->entlst->ents));
 			if (data->cmds & CMD_r)
 				print_r_ents(data->entlst->ents, data);
@@ -36,5 +36,5 @@ void	print_entlst(t_data *data)
 			i++;
 		}
 		data->entlst = data->entlst->next;
-	}	
+	}
 }

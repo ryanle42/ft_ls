@@ -6,7 +6,7 @@
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/17 14:02:12 by rle               #+#    #+#             */
-/*   Updated: 2017/05/26 15:33:54 by rle              ###   ########.fr       */
+/*   Updated: 2017/07/17 15:48:11 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int		set_cmd(int *cmds, char cmd)
 	return (1);
 }
 
-int			get_commands(int argc, char **argv)
+int				get_commands(int argc, char **argv)
 {
 	int cmds;
 	int i;

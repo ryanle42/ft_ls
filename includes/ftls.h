@@ -6,7 +6,7 @@
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/16 19:28:16 by anonymous         #+#    #+#             */
-/*   Updated: 2017/05/27 18:29:56 by rle              ###   ########.fr       */
+/*   Updated: 2017/07/17 17:19:53 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ typedef struct			s_data
 {
 	int					cmds;
 	int					num_ents;
+	int					nl;
 	struct s_error		*errors;
 	struct s_ent		*singent;
 	struct s_entlst		*entlst;
@@ -44,6 +45,7 @@ typedef struct			s_entlst
 typedef struct			s_ent
 {
 	char				*name;
+	char				*err;
 	struct stat			sb;
 	struct passwd		*pw;
 	struct group		*grp;
@@ -58,7 +60,7 @@ typedef struct			s_error
 }						t_error;
 
 typedef struct			s_errlst
-{	
+{
 	char				*name;
 	char				*path;
 	char				*msg;
@@ -79,7 +81,7 @@ typedef struct			s_names
 	struct s_names		*next;
 }						t_names;
 
-enum					s_cmds
+enum					e_cmds
 {
 	CMD_l = 1,
 	CMD_R = 2,
@@ -100,7 +102,8 @@ int						get_commands(int argc, char **argv);
 */
 char					*name_from_path(char *path);
 char					*get_fpath(char *path, char *name);
-void					read_ent(char *path, char *name, t_data *data, t_ent *ents);
+void					read_ent(char *path, char *name, t_data \
+							*data, t_ent *ents);
 void					count_folders(t_data *data);
 void					rev_names(t_names **head);
 /*
@@ -108,7 +111,6 @@ void					rev_names(t_names **head);
 */
 t_error					*errors_init(void);
 t_errlst				*errlst_init(void);
-void					add_pdeny(t_errlst *head, char *path);
 void					add_nofile(t_errlst *head, char *name);
 
 /*
@@ -118,20 +120,16 @@ t_ent					*ent_init(void);
 int						add_ent(char *path, char *name, t_ent *head);
 
 /*
-**	listxattr
-*/
-
-/*
 **	get_sperm
 */
 char					*get_sperm(int mode);
-
 
 /*
 **	entlst
 */
 t_entlst				*entlst_init(void);
-void					entlst_add_ents(t_entlst *entlst, t_ent *ents, char *path);
+void					entlst_add_ents(t_entlst *entlst, t_ent *ents, \
+							char *path);
 
 /*
 **	recursion
@@ -142,13 +140,15 @@ void					recursion(char *path, t_data *data);
 **	sort
 */
 int						is_sorted(char *str1, char *str2);
-int						sort_names(int max, char **argv);
-void					sort_add_name(t_data *data, char *path, t_names *head, char *name);
+int						sort_names(t_data *data, int max, char **argv);
+void					sort_add_name(t_data *data, char *path, t_names *head, \
+							char *name);
 
 /*
 **	ent/
 */
-void					read_ent(char *path, char *name, t_data *data, t_ent *ents);
+void					read_ent(char *path, char *name, t_data *data, \
+							t_ent *ents);
 t_ent					*ent_init(void);
 int						add_ent(char *path, char *name, t_ent *head);
 
@@ -157,7 +157,7 @@ int						add_ent(char *path, char *name, t_ent *head);
 */
 void					print_ents(t_ent *head, t_data *data);
 void					print_r_ents(t_ent *head, t_data *data);
-void					print_l(t_ent *head, t_sp spaces);
+void					print_l(t_data *data, t_ent *head, t_sp spaces);
 void					calc_spaces(t_ent *head, t_sp *spaces);
 void					print_errlst(t_errlst *error, int i);
 void					print_entlst(t_data *data);
@@ -175,28 +175,16 @@ t_entlst				*entlst_init(void);
 **	error/
 */
 t_error					*errors_init(void);
-void					add_pdeny(t_errlst *head, char *path);
+void					print_pdeny(char *path, t_data *data);
+int						add_pdeny(char *path, t_ent *head);
 void					add_nofile(t_errlst *head, char *name);
 
 /*
 **	names/
 */
 t_names					*names_init(void);
+void					free_names(t_names **names);
 void					add_name(t_names *head, char *name);
-/*
-void	add_pdeny(t_errlst *head, char *path);
-struct passwd {
-	char *pw_name;
-	char *pw_passwd;
-	uid_t pw_uid;
-	gid_t pw_gid;
-	time_t pw_change;
-	char *pw_class;
-	char *pw_gecos;
-	char *pw_dir;
-	char *pw_shell;
-	time_t pw_expire;
-}; 
-*/
+int						ft_timecmp(char *curr, char *name);
 
 #endif

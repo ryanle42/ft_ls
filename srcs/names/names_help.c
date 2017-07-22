@@ -1,35 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_errlst.c                                     :+:      :+:    :+:   */
+/*   names_help.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/05/26 15:14:14 by rle               #+#    #+#             */
-/*   Updated: 2017/07/17 17:45:28 by rle              ###   ########.fr       */
+/*   Created: 2017/07/17 15:22:09 by rle               #+#    #+#             */
+/*   Updated: 2017/07/17 15:25:05 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ftls.h>
 
-void	print_errlst(t_errlst *error, int i)
+int	ft_timecmp(char *curr, char *name)
 {
-	t_errlst *curr;
+	struct stat sb1;
+	struct stat sb2;
 
-	curr = error;
-	i = 0;
-	if (error && error->msg)
-	{
-		while (error && error->msg)
-		{
-			ft_printf("%s", error->msg);
-			curr = error->next;
-			if (curr)
-				ft_printf("\n");
-			free(error->msg);
-			free(error);
-			error = curr;
-		}
-		ft_printf("\n");
-	}
+	if ((stat(name, &sb1)) < 0)
+		return (-1);
+	if ((stat(curr, &sb2)) < 0)
+		return (-1);
+	return (sb1.st_mtime - sb2.st_mtime);
 }

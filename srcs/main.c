@@ -5,47 +5,62 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/05/16 20:07:42 by anonymous         #+#    #+#             */
-/*   Updated: 2017/05/27 19:16:22 by rle              ###   ########.fr       */
+/*   Created: 2017/07/17 15:03:33 by rle               #+#    #+#             */
+/*   Updated: 2017/07/21 17:29:22 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ftls.h>
 
-int	entlst_from_path(char *path, t_data *data)
+static t_ent	*entlst_from_path_help(t_data *data, char *path, \
+	DIR **dirp, t_names **head)
 {
-	DIR *dirp;
-	struct dirent *dp;
-	t_ent *ents;
-	t_names *names;
+	struct dirent	*dp;
+	t_ent			*ents;
+	t_names			*curr;
 
-	names = names_init();
+	curr = *head;
 	if (NULL == (ents = ent_init()))
-			return (-1);
+		return (NULL);
+	if (data->cmds & CMD_R)
+		recursion(path, data);
+	else
+	{
+		while (NULL != (dp = readdir((*dirp))))
+			sort_add_name(data, path, curr, ft_copystr(dp->d_name));
+		while (curr && curr->name)
+		{
+			if ((data->cmds & CMD_a) || curr->name[0] != '.')
+				read_ent(path, curr->name, data, ents);
+			curr = curr->next;
+		}
+		entlst_add_ents(data->entlst, ents, path);
+	}
+	closedir((*dirp));
+	free_names(head);
+	return (ents);
+}
+
+int				entlst_from_path(char *path, t_data *data)
+{
+	DIR				*dirp;
+	t_ent			*ents;
+	t_names			*names;
+
+	ents = NULL;
 	if (NULL != (dirp = opendir(path)))
 	{
-		if (data->cmds & CMD_R)
-			recursion(path, data);
-		else
-		{
-			while (NULL != (dp = readdir(dirp)))
-				sort_add_name(data, path, names, ft_copystr(dp->d_name));
-			if (data->cmds & CMD_r)
-				rev_names(&names);
-			while (names && names->name)
-			{
-				if ((data->cmds & CMD_a) || names->name[0] != '.')
-					read_ent(path, names->name, data, ents);
-				names = names->next;
-			}
-			entlst_add_ents(data->entlst, ents, path);
-		}
-		closedir(dirp);
+		names = names_init();
+		if (NULL == (ents = entlst_from_path_help(data, path, &dirp, &names)))
+			return (-1);
 	}
 	else
 	{
 		if (errno == EACCES)
-			add_pdeny(data->errors->pdeny, path);
+		{
+			add_pdeny(path, ents);
+			entlst_add_ents(data->entlst, ents, path);
+		}
 		else
 			read_ent(".", path, data, data->singent);
 		errno = 0;
@@ -53,8 +68,9 @@ int	entlst_from_path(char *path, t_data *data)
 	return (1);
 }
 
-int	parse_params(int start, int argc, char **argv, t_data *data)
+int				parse_params(int start, int argc, char **argv, t_data *data)
 {
+	data->nl = argc - start;
 	if (start == argc)
 		entlst_from_path(".", data);
 	while (start < argc)
@@ -66,7 +82,7 @@ int	parse_params(int start, int argc, char **argv, t_data *data)
 	return (1);
 }
 
-t_data	*data_init(void)
+t_data			*data_init(void)
 {
 	t_data *data;
 
@@ -79,30 +95,22 @@ t_data	*data_init(void)
 	if (NULL == (data->singent = ent_init()))
 		return (NULL);
 	data->num_ents = 0;
+	data->nl = 0;
 	return (data);
 }
 
-/*
-** 	ft_printf("R %i l %i r %i a %i t %i T %i\n", (data->cmds & CMD_R), (data->cmds & CMD_l), (data->cmds & CMD_r), \
-**		(data->cmds & CMD_a), (data->cmds & CMD_t), (data->cmds & CMD_T));
-*/
-
-int main(int argc, char **argv)
+int				main(int argc, char **argv)
 {
-	t_data *data;
-	int start;
+	t_data	*data;
+	int		start;
 
 	if (NULL == (data = data_init()))
 		return (-1);
 	data->cmds = get_commands(argc, argv);
-	start = sort_names(argc, argv);
+	start = sort_names(data, argc, argv);
 	parse_params(start, argc, argv, data);
-		print_errlst(data->errors->nofile, 0);
 	print_singent(data);
-	print_errlst(data->errors->pdeny, data->num_ents);
+	print_errlst(data->errors->nofile, data->num_ents);
 	print_entlst(data);
 	return (0);
 }
-
-
-

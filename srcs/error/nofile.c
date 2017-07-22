@@ -6,7 +6,7 @@
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/26 15:15:07 by rle               #+#    #+#             */
-/*   Updated: 2017/05/27 19:14:51 by rle              ###   ########.fr       */
+/*   Updated: 2017/07/17 15:48:36 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static char	*nofile_msg(char *name)
 	return (msg);
 }
 
-void	add_nofile(t_errlst *head, char *name)
+void		add_nofile(t_errlst *head, char *name)
 {
 	t_errlst	*curr;
 

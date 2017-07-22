@@ -5,53 +5,69 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/05/21 23:39:36 by anonymous         #+#    #+#             */
-/*   Updated: 2017/05/27 18:18:23 by rle              ###   ########.fr       */
+/*   Created: 2017/07/17 15:52:03 by rle               #+#    #+#             */
+/*   Updated: 2017/07/21 17:31:57 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ftls.h>
 
-void	recursion(char *path, t_data *data)
+static void	recursion_help(DIR **dirp, t_data *data, \
+	char *path)
 {
-	t_names *names;
-	DIR *dirp;
-	struct dirent *dp;
-	t_ent *ents;
+	struct dirent	*dp;
+	t_names			*curr;
+	t_names			*head;
 
-	names = names_init();
-	if (NULL == (ents = ent_init()))
-		return ;
+	head = names_init();
+	curr = head;
+	while (NULL != (dp = readdir(*dirp)))
+		sort_add_name(data, path, curr, ft_copystr(dp->d_name));
+	if (data->cmds & CMD_r)
+		rev_names(&curr);
+	while (curr && curr->name)
+	{
+		if ((ft_strcmp(curr->name, ".") != 0) && \
+			(ft_strcmp(curr->name, "..") != 0) && \
+			((data->cmds & CMD_a) || curr->name[0] != '.'))
+			recursion(get_fpath(path, curr->name), data);
+		curr = curr->next;
+	}
+	free_names(&head);
+	closedir(*dirp);
+}
+
+static void	norm_cheat(t_names **head, t_ent **ents)
+{
+	*head = names_init();
+	*ents = ent_init();
+}
+
+void		recursion(char *path, t_data *data)
+{
+	t_names			*head;
+	t_names			*curr;
+	DIR				*dirp;
+	struct dirent	*dp;
+	t_ent			*ents;
+
+	norm_cheat(&head, &ents);
+	curr = head;
 	if (NULL != (dirp = opendir(path)))
 	{
 		while (NULL != (dp = readdir(dirp)))
-			sort_add_name(data, path, names, ft_copystr(dp->d_name));
-		while (names && names->name)
+			sort_add_name(data, path, curr, ft_copystr(dp->d_name));
+		while (curr && curr->name)
 		{
-			if ((data->cmds & CMD_a) || names->name[0] != '.')
-				read_ent(path, names->name, data, ents);
-			names = names->next;
+			if ((data->cmds & CMD_a) || curr->name[0] != '.')
+				read_ent(path, curr->name, data, ents);
+			curr = curr->next;
 		}
 		closedir(dirp);
 		entlst_add_ents(data->entlst, ents, path);
 	}
 	else
 		return ;
-	names = names_init();
 	if (NULL != (dirp = opendir(path)))
-	{
-		while (NULL != (dp = readdir(dirp)))
-			sort_add_name(data, path, names, ft_copystr(dp->d_name));
-		if (data->cmds & CMD_r)
-				rev_names(&names);
-		while (names && names->name)
-		{
-			if ((ft_strcmp(names->name, ".") != 0) && \
-				(ft_strcmp(names->name, "..") != 0) && \
-				((data->cmds & CMD_a) || names->name[0] != '.'))
-					recursion(get_fpath(path, names->name), data);
-				names = names->next;
-		}
-		closedir(dirp);
-	}
+		recursion_help(&dirp, data, path);
 }

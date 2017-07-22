@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anonymous <anonymous@student.42.fr>        +#+  +:+       +#+        */
+/*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/28 19:46:23 by rle               #+#    #+#             */
-/*   Updated: 2017/05/21 23:03:35 by anonymous        ###   ########.fr       */
+/*   Updated: 2017/07/17 16:14:03 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	freestr(char *s1, char *s2, int opt)
 		free(s2);
 }
 
-char	*ft_strjoin(char *s1, char *s2, int opt)
+char		*ft_strjoin(char *s1, char *s2, int opt)
 {
 	int		i;
 	int		j;

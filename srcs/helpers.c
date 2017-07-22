@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/05/23 20:20:57 by anonymous         #+#    #+#             */
-/*   Updated: 2017/05/26 15:49:51 by rle              ###   ########.fr       */
+/*   Created: 2017/07/17 15:07:52 by rle               #+#    #+#             */
+/*   Updated: 2017/07/17 17:06:02 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 char	*name_from_path(char *path)
 {
-	int i;
-	int j;
-	char *name;
+	int		i;
+	int		j;
+	char	*name;
 
 	j = 0;
 	i = 0;
@@ -62,11 +62,11 @@ void	rev_names(t_names **head)
 	}
 }
 
-char *get_fpath(char *path, char *name)
+char	*get_fpath(char *path, char *name)
 {
 	char *fpath;
 
 	fpath = ft_strjoin(path, "/", 0);
-	fpath = ft_strjoin(fpath, name, 0);
+	fpath = ft_strjoin(fpath, name, 1);
 	return (fpath);
 }

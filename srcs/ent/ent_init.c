@@ -21,5 +21,6 @@ t_ent		*ent_init(void)
 	ent->name = NULL;
 	ent->next = NULL;
 	ent->prev = NULL;
+	ent->err = NULL;
 	return (ent);
 }

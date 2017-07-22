@@ -6,7 +6,7 @@
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/26 15:25:41 by rle               #+#    #+#             */
-/*   Updated: 2017/05/26 16:19:51 by rle              ###   ########.fr       */
+/*   Updated: 2017/07/17 15:17:01 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 long	calc_total(t_ent *head)
 {
-	t_ent *curr;
-	long total;
+	t_ent	*curr;
+	long	total;
 
 	total = 0;
 	curr = head;
@@ -33,7 +33,6 @@ void	calc_spaces(t_ent *head, t_sp *spaces)
 	spaces->links = 0;
 	spaces->name = 0;
 	spaces->files = 0;
-
 	while (head && head->name)
 	{
 		if (spaces->fl_sz < ft_int_length(head->sb.st_size))
